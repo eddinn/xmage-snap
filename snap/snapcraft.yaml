@@ -1,37 +1,31 @@
 name: xmage-snap # you probably want to 'snapcraft register <name>'
 base: core24 # the base snap is the execution environment for this snap
 version: '0.1' # just for humans, typically '1.2+git' or '1.3.2'
-summary: Single-line elevator pitch for your amazing snap # 79 char long summary
+summary: Simple XMage Snap package with bundled java # 79 char long summary
 description: |
   Simple XMage Snap package with bundled java
 
 grade: devel # must be 'stable' to release into candidate/stable channels
 confinement: devmode # use 'strict' once you have the right plugs and slots
 
-# List of architectures the snap may run on. Defaults to [all].
-architectures:
-    - all
-
 # List of applications (commands, binaries, daemons) in the snap. 
 apps:
   xmage-snap:
       # Path to executable (relative to snap base) and arguments to use
       # when this application is run.
-      command: schemacrawler-15.01.04-distribution/_schemacrawler/schemacrawler.sh
+      command: usr/lib/jvm/java-21-openjdk-amd64/bin/java -jar $SNAP/XMageLauncher-0.3.8.jar
+      plugs: [home, desktop, x11, network, network-bind]
       environment: 
-          JAVA_HOME: $SNAP/usr/lib/jvm/java-1.8.0-openjdk-$SNAP_ARCH
-          PATH: $JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH
-
+          JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-$SNAP_ARCH
+          PATH: $JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH:$SNAP/common
 
 parts:
     xmage-snap:
         source: http://xmage.today/files/mage-full_1.4.51-dev_2024-06-06_19-55.zip
         plugin: dump
         build-packages:
-            - unzip
-            - wget
-            - ca-certificates
-            - ca-certificates-java
-            - openjdk-21-jre-headless
+            - openjdk-21-jdk
         stage-packages:
+            - gtk2-engines-murrine
+            - hicolor-icon-theme
             - openjdk-21-jdk
