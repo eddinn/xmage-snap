@@ -1,0 +1,7 @@
+#! /bin/sh
+
+# Check if required files exist in $SNAP
+if [ -f "$HOME/stage/XMageLauncher-0.3.8.jar" ]; then
+  # Copy the files from the snap to the writable dir
+  cp -rfa "$HOME/stage/{XMageLauncher-0.3.8.jar,installed.properties,run-LAUNCHER.cmd,run-launcher-and-wait.cmd,xmage}" "$SNAP_USER_DATA/"
+fi
