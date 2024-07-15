@@ -20,8 +20,8 @@ parts:
     xmage-snap:
         source: http://xmage.today/files/mage-full_1.4.51-dev_2024-06-06_19-55.zip
         plugin: dump
-        build-packages:
-            - openjdk-21-jdk
+        #build-packages:
+        #    - openjdk-21-jdk
         stage-packages:
             - gtk2-engines-murrine
             - hicolor-icon-theme
