@@ -1,28 +1,68 @@
 name: xmage-snap
 base: core24
-version: 'dev-0.1'
-summary: Simple XMage Snap package with bundled java
+version: 'dev-0.2.1'
+summary: XMage snap application
 description: |
-  Simple XMage Snap package with bundled java
+  XMage allows you to play Magic the Gathering games with other players.
 
 grade: devel
 confinement: devmode
 
-apps:
-  xmage-snap:
-      command: usr/lib/jvm/java-21-openjdk-amd64/bin/java -jar $SNAP_USER_DATA/XMageLauncher-0.3.8.jar
-      plugs: [home, desktop, x11, wayland, network, network-bind]
-      environment: 
-          JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-$SNAP_ARCH
-          PATH: $JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH:$SNAP/common
+#apps:
+#  xmage-snap:
+#      command: usr/lib/jvm/java-21-openjdk-amd64/bin/java -Duser.home=$SNAP_USER_DATA -jar $SNAP/XMageLauncher-0.3.8.jar
+#      plugs: [home, desktop, x11, wayland, network, network-bind]
+#      environment: 
+#          JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-$SNAP_ARCH
+#          PATH: $JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH:$SNAP/common
 
-parts:
-    xmage-snap:
-        source: http://xmage.today/files/mage-full_1.4.51-dev_2024-06-06_19-55.zip
-        plugin: dump
+#parts:
+#    xmage-snap:
+#        source: http://xmage.today/files/mage-full_1.4.51-dev_2024-06-06_19-55.zip
+#        plugin: dump
         #build-packages:
         #    - openjdk-21-jdk
-        stage-packages:
-            - gtk2-engines-murrine
-            - hicolor-icon-theme
-            - openjdk-21-jdk
+#        stage-packages:
+#            - gtk2-engines-murrine
+#            - hicolor-icon-theme
+#            - openjdk-21-jdk
+
+apps:
+  xmage-snap:
+    command: $SNAP/start-xmage.sh
+    plugs:
+      - home
+      - network
+      - x11
+      - wayland
+      - desktop
+      - desktop-legacy
+      - unity7
+      - opengl
+      - pulseaudio
+      - audio-playback
+
+parts:
+  xmage-snap:
+    source: http://xmage.today/files/mage-full_1.4.51-dev_2024-06-06_19-55.zip
+    plugin: dump
+    stage-packages:
+      - openjdk-21-jre
+      - libgtk-3-0
+      - libgdk-pixbuf2.0-0
+      - libglib2.0-bin
+      - libglu1-mesa
+      - libgl1-mesa-dri
+      - libglx-mesa0
+      - libpulse0
+      - libasound2
+    organize: 
+      start-xmage.sh: $SNAP/start-xmage.sh
+
+environment:
+  XMAGE_HOME: $SNAP_USER_DATA
+  JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-amd64
+
+layout:
+  /usr/lib/jvm/java-21-openjdk-amd64:
+    bind: $SNAP/usr/lib/jvm/java-21-openjdk-amd64

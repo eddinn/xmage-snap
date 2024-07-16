@@ -1,7 +1,8 @@
-#! /bin/sh
+#!/bin/sh
 
-# Check if required files exist in $SNAP
-if [ -f "../stage/XMageLauncher-0.3.8.jar" ]; then
-  # Copy the files from the snap to the writable dir
-  cp -rfa "../stage/{XMageLauncher-0.3.8.jar,installed.properties,run-LAUNCHER.cmd,run-launcher-and-wait.cmd,xmage}" "$SNAP_USER_DATA/"
-fi
+# Ensure the bin directory exists in the snap environment
+mkdir -p "$SNAP"/bin
+
+# Copy the start-xmage.sh script to the bin directory in the snap environment
+cp "$SNAP_DATA"/start-xmage.sh "$SNAP"/bin/
+chmod +x "$SNAP"/bin/start-xmage.sh
