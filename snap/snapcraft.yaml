@@ -1,6 +1,6 @@
 name: xmage-snap
 base: core24
-version: 'dev-0.2.1'
+version: 'dev-0.2.2'
 summary: XMage snap application
 description: |
   XMage allows you to play Magic the Gathering games with other players.
@@ -8,27 +8,10 @@ description: |
 grade: devel
 confinement: devmode
 
-#apps:
-#  xmage-snap:
-#      command: usr/lib/jvm/java-21-openjdk-amd64/bin/java -Duser.home=$SNAP_USER_DATA -jar $SNAP/XMageLauncher-0.3.8.jar
-#      plugs: [home, desktop, x11, wayland, network, network-bind]
-#      environment: 
-#          JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-$SNAP_ARCH
-#          PATH: $JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH:$SNAP/common
-
-#parts:
-#    xmage-snap:
-#        source: http://xmage.today/files/mage-full_1.4.51-dev_2024-06-06_19-55.zip
-#        plugin: dump
-        #build-packages:
-        #    - openjdk-21-jdk
-#        stage-packages:
-#            - gtk2-engines-murrine
-#            - hicolor-icon-theme
-#            - openjdk-21-jdk
-
 apps:
   xmage-snap:
+    command-chain:
+      - setup-xmage.sh
     command: start-xmage.sh
     plugs:
       - home
@@ -41,6 +24,7 @@ apps:
       - opengl
       - pulseaudio
       - audio-playback
+      - system-observe
 
 parts:
   xmage-snap:
@@ -57,15 +41,11 @@ parts:
       - libglx-mesa0
       - libpulse0
       - libasound2
-    #organize: 
-      #start-xmage.sh: start-xmage.sh
 
 environment:
-  XMAGE_HOME: $SNAP_COMMON/opt/xmage
+  XMAGE_HOME: $SNAP_USER_COMMON/xmage
   JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-amd64
 
 layout:
-  /opt/xmage:
-    bind: $SNAP_COMMON/opt/xmage
   /usr/lib/jvm/java-21-openjdk-amd64:
     bind: $SNAP/usr/lib/jvm/java-21-openjdk-amd64
