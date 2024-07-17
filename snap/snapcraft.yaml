@@ -29,7 +29,7 @@ confinement: devmode
 
 apps:
   xmage-snap:
-    command: $SNAP/start-xmage.sh
+    command: start-xmage.sh
     plugs:
       - home
       - network
@@ -44,7 +44,8 @@ apps:
 
 parts:
   xmage-snap:
-    source: http://xmage.today/files/mage-full_1.4.51-dev_2024-06-06_19-55.zip
+    #source: http://xmage.today/files/mage-full_1.4.51-dev_2024-06-06_19-55.zip
+    source: .
     plugin: dump
     stage-packages:
       - openjdk-21-jre
@@ -56,13 +57,15 @@ parts:
       - libglx-mesa0
       - libpulse0
       - libasound2
-    organize: 
-      start-xmage.sh: $SNAP/start-xmage.sh
+    #organize: 
+      #start-xmage.sh: start-xmage.sh
 
 environment:
-  XMAGE_HOME: $SNAP_USER_DATA
+  XMAGE_HOME: $SNAP_COMMON/opt/xmage
   JAVA_HOME: $SNAP/usr/lib/jvm/java-21-openjdk-amd64
 
 layout:
+  /opt/xmage:
+    bind: $SNAP_COMMON/opt/xmage
   /usr/lib/jvm/java-21-openjdk-amd64:
     bind: $SNAP/usr/lib/jvm/java-21-openjdk-amd64
